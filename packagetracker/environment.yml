@@ -1,0 +1,10 @@
+name: packagetracker
+channels:
+  - defaults
+dependencies:
+  - matplotlib=3.8.0
+  - pandas=2.1.4
+  - python=3.11.5
+  - requests=2.31.0
+  - sqlalchemy=2.0.21
+  - xlwings=0.29.1
