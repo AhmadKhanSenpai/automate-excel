@@ -1,4 +1,4 @@
-name: packagetracker
+name: automate_excel
 channels:
   - defaults
 dependencies:
