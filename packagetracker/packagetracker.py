@@ -4,14 +4,12 @@ or manipulate Excel.
 
 import datetime as dt
 
-from dateutil import tz
-import requests
-import pandas as pd
-import matplotlib.pyplot as plt
-import xlwings as xw
-
 import database
-
+import matplotlib.pyplot as plt
+import pandas as pd
+import pytz
+import requests
+import xlwings as xw
 
 # This is the part of the URL that is the same for every request
 BASE_URL = "https://pypi.org/pypi"
@@ -92,8 +90,9 @@ def update_database():
         logs.append(f"INFO: {row['package_name']} stored to database successfully")
 
     # Write out the last updated timestamp and logs
+    pakistan_tz = pytz.timezone("Asia/Karachi") # to show the current Pakistan time instad of UTC
     sheet_db["updated_at"].value = (f"Last updated: "
-                                    f"{dt.datetime.now(tz.UTC).isoformat()}")
+                                    f"{dt.datetime.now(pakistan_tz).strftime('%Y-%m-%d %I:%M %p')}")
     sheet_db["log"].options(transpose=True).value = logs
 
 
@@ -144,9 +143,9 @@ def show_history():
               f"({tracker_sheet['package_selection'].value})")
 
     # Write the results and plot to Excel
-    version = df_releases.loc[df_releases.index.max(), "version_string"]
+    latest_version = df_releases.loc[df_releases.index.max(), "version_string"]
     tracker_sheet["latest_release"].value = (
-        f"{version} ({df_releases.index.max():%B %d, %Y})")
+        f"{latest_version} ({df_releases.index.max():%B %d, %Y})")
     tracker_sheet.pictures.add(ax.get_figure(), name="releases_per_year",
                                top=picture_cell.top,
                                left=picture_cell.left)
